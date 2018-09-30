@@ -379,13 +379,16 @@ function getEmailsFromBook(callback,id){
  * @param callback
  * @param id
  * @param emails
+ * @param doubleOptIn
  */
-function addEmails(callback,id,emails){
+function addEmails(callback,id,emails,doubleOptIn){
     if ((id===undefined) || (emails === undefined) || (! emails.length)) {
         return callback(returnError("Empty email or book id"));
     }
     var data = {emails: serialize(emails)};
-    sendRequest( 'addressbooks/' + id + '/emails', 'POST', data, true, callback );
+    var params = doubleOptIn ? `?confirmation=force&sender_email=${doubleOptIn}` : '';
+
+    sendRequest( 'addressbooks/' + id + `/emails${params}`, 'POST', data, true, callback );
 }
 
 /**
